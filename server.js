@@ -82,7 +82,7 @@ mongoose.connect('mongodb://test:testtest6@ds241723.mlab.com:41723/pssocial', { 
 })
 
 app.use('/auth', auth.router)
-app.get('/', (req, res) => {
+/*app.get('/', (req, res) => {
     res.send('هلا والله يا شباب')
-})
+})*/
 app.listen(process.env.PORT || 3000)
