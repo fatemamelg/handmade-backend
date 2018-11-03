@@ -5,10 +5,6 @@ var mongoose = require('mongoose')
 var app = express()
 var jwt = require('jwt-simple')
 
-// Run the app by serving the static files
-// in the dist directory
-app.use(express.static('/dist'));
-
 
 var User = require('./models/User.js')
 var Post = require('./models/Post')
@@ -86,7 +82,4 @@ mongoose.connect('mongodb://test:testtest6@ds241723.mlab.com:41723/pssocial', { 
 })
 
 app.use('/auth', auth.router)
-/*app.get('/', (req, res) => {
-    res.send('هلا والله يا شباب')
-})*/
 app.listen(process.env.PORT || 3000)
