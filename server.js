@@ -5,6 +5,10 @@ var mongoose = require('mongoose')
 var app = express()
 var jwt = require('jwt-simple')
 
+// Run the app by serving the static files
+// in the dist directory
+app.use(express.static('/dist'));
+
 
 var User = require('./models/User.js')
 var Post = require('./models/Post')
