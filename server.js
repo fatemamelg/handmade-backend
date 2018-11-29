@@ -4,16 +4,37 @@ var bodyParser = require('body-parser')
 var mongoose = require('mongoose')
 var app = express()
 var jwt = require('jwt-simple')
+var multer = require('multer');
+var fs = require('fs')
+var upload = multer({dest : 'uploads/'}).single('photo') 
 
 
 var User = require('./models/User.js')
 var Post = require('./models/Post')
 var auth = require('./auth.js')
 
+app.post('/imageupload',upload,function(req,res){
+    //req.file will now be available as a json object, save to mongodb, re: filename, path etc
+    res.send('rabbit')
+})
+
 mongoose.Promise = Promise
 
 app.use(cors())
 app.use(bodyParser.json())
+
+/* app.use(multer({ dest: './uploads/',
+    rename: function (fieldname, filename) {
+      return filename;
+    },
+}));
+
+app.post('/api/photo',function(req,res){
+    var user = new User();
+    user.img.data = fs.readFileSync(req.files.userPhoto.path)
+    user.img.contentType = 'image/png';
+    user.save();
+}); */
 
 function checkAuthenticated(req, res, next) {
     if(!req.header('authorization')) 
