@@ -13,10 +13,10 @@ var User = require('./models/User.js')
 var Post = require('./models/Post')
 var auth = require('./auth.js')
 
-app.post('/imageupload',upload,function(req,res){
+/*app.post('/imageupload',upload,function(req,res){
     //req.file will now be available as a json object, save to mongodb, re: filename, path etc
     res.send('rabbit')
-})
+})*/
 
 mongoose.Promise = Promise
 
