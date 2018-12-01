@@ -59,6 +59,29 @@ app.get('/posts/:id', async (req, res) => {
     res.send(posts)
 })
 
+app.get('/posts', async (req, res) => {
+
+    try {
+        var category = req.params.id
+        var posts = await Post.find({})
+        res.send(posts)
+    } catch (error) {
+        console.error(error)
+        res.sendStatus(500)
+    }
+})
+
+app.get('/category', async (req, res) => {
+
+    try {
+        var posts = await Post.find({})
+        res.send(posts)
+    } catch (error) {
+        console.error(error)
+        res.sendStatus(500)
+    }
+})
+
 app.post('/posts', auth.checkAuthenticated, (req, res) => {
     var postData = req.body
     postData.author = req.userId
