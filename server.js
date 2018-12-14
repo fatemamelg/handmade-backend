@@ -7,6 +7,8 @@ var app = express()
 var jwt = require('jwt-simple')
 var multer = require('multer');
 var fs = require('fs')
+const cloudinary = require("cloudinary");
+const cloudinaryStorage = require("multer-storage-cloudinary");
 var upload = multer({ dest: 'uploads/' }).single('photo')
 
 
@@ -21,7 +23,12 @@ var DIR = './uploads/';
 //define the type of upload multer would be doing and pass in its destination, in our case, its a single file with the name photo
 var upload = multer({ dest: DIR }).single('photo');
 
-app.get('/upload/:filename', function (req, res, next) {
+mongoose.Promise = Promise
+
+app.use(cors())
+app.use(bodyParser.json())
+
+app.get('/uploads/:filename', function (req, res, next) {
     var filename = req.params.filename;
     var path = DIR + filename;
     fs.exists(path, (exists) => {
@@ -34,10 +41,28 @@ app.get('/upload/:filename', function (req, res, next) {
     });
 })
 
-mongoose.Promise = Promise
+app.post('/uploads', function (req, res, next) {
+    var path = '';
+    upload(req, res, function (err) {
+       if (err) {
+         // An error occurred when uploading
+         console.log(err);
+         return res.status(422).send("an Error occured")
+       }  
+      // No error occured.
+       path = req.file.path;
+       return res.send("Upload Completed for " + path); 
+ });     
+})
 
-app.use(cors())
-app.use(bodyParser.json())
+//create a cors middleware
+app.use(function(req, res, next) {
+//set headers to allow cross origin request.
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 
 app.post('/api/photo', function (req, res) {
@@ -84,6 +109,7 @@ app.get('/posts', async (req, res) => {
 app.post('/posts', auth.checkAuthenticated, (req, res) => {
     var postData = req.body
     postData.author = req.userId
+    postData.tag = req.catId
 
     var post = new Post(postData)
 
